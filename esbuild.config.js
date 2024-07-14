@@ -1,13 +1,17 @@
 const esbuild = require('esbuild');
 const { sassPlugin } = require('esbuild-sass-plugin');
+const dotenv = require('dotenv');
+dotenv.config();
+
 
 let minify = true;
 if (process.argv.includes('--watch')) {
 	minify = false;
 }
 
+const entryPoints = process.env.ENTRY_POINTS;
 const buildOptions = {
-  entryPoints: ['frontend/src/js/main.js'],  // Your main JS file
+  entryPoints: [entryPoints],  // Your main JS file
   bundle: true,
   outdir: 'dist',
   plugins: [sassPlugin()],
@@ -26,7 +30,7 @@ const buildOptions = {
     '.gif': 'file',
   },
   define: {
-    'window.IS_PRODUCTION': minify,
+    'window.IS_PRODUCTION': JSON.stringify(minify),
   },
 };
 
